@@ -1,7 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Vaxraa/demo
   branch: main
-
+  
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
