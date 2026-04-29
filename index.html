@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Véxz Café — Where Every Cup Tells a Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* =============================================
+   VÉXZ CAFÉ — ONE IN A MILLION
+   ============================================= */
+:root {
+  --cream:       #FAF6EF;
+  --warm-white:  #FDF9F4;
+  --brown-dark:  #1C1008;
+  --brown-mid:   #3D1F0A;
+  --brown-acc:   #7B3F1A;
+  --gold:        #C8922A;
+  --gold-light:  #E8B86D;
+  --gold-pale:   #F5DFB0;
+  --text:        #4A3728;
+  --muted:       #8A7060;
+  --border:      rgba(124,63,26,.14);
+  --r:           18px;
+  --tr:          .3s cubic-bezier(.4,0,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{position:fixed;width:12px;height:12px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;mix-blend-mode:multiply;}
+#cursor-ring{position:fixed;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .12s,width .25s,height .25s,border-color .25s;opacity:.6;}
+body:hover #cursor{opacity:1;}
+
+/* ── GRAIN OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.032;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;cursor:none;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--brown-dark);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+/* =============================================
+   LOADER
+   ============================================= */
+#loader{position:fixed;inset:0;z-index:8000;background:var(--brown-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;transition:opacity .8s .2s, visibility .8s .2s;}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-logo{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;color:var(--gold-light);letter-spacing:-.02em;opacity:0;animation:loaderFade .9s .3s forwards;}
+.loader-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:loaderLine 1.4s .5s forwards;}
+.loader-sub{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(253,249,244,.35);opacity:0;animation:loaderFade .7s 1.1s forwards;}
+@keyframes loaderFade{to{opacity:1;}}
+@keyframes loaderLine{to{width:180px;}}
+
+/* =============================================
+   NAVBAR
+   ============================================= */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;padding:1.4rem 5%;transition:background var(--tr),backdrop-filter var(--tr),padding var(--tr);}
+nav.scrolled{background:rgba(28,16,8,.88);backdrop-filter:blur(20px);padding:.9rem 5%;border-bottom:1px solid rgba(200,146,42,.12);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--warm-white);letter-spacing:-.02em;flex:1;text-decoration:none;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;margin-right:2.5rem;}
+.nav-links a{text-decoration:none;color:rgba(253,249,244,.65);font-size:.83rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;transition:color var(--tr);position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s;}
+.nav-links a:hover{color:var(--gold-light);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{background:transparent;color:var(--gold-light);border:1px solid rgba(200,146,42,.5);padding:.6rem 1.5rem;border-radius:50px;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:none;transition:all var(--tr);}
+.nav-cta:hover{background:var(--gold);color:var(--brown-dark);border-color:var(--gold);}
+.hamburger{display:none;font-size:1.4rem;color:var(--warm-white);cursor:none;background:none;border:none;}
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--brown-dark);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-style:italic;color:var(--warm-white);text-decoration:none;transition:color .2s;}
+.mobile-menu a:hover{color:var(--gold-light);}
+.mobile-close{position:absolute;top:2rem;right:5%;font-size:2rem;color:var(--muted);background:none;border:none;cursor:none;}
+
+/* =============================================
+   HERO
+   ============================================= */
+.hero{position:relative;height:100vh;min-height:700px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hero-bg{position:absolute;inset:-8%;background:url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1800&q=85') center/cover no-repeat;filter:brightness(.22) saturate(1.5);will-change:transform;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(28,16,8,.92) 0%,rgba(28,16,8,.5) 60%,rgba(61,31,10,.7) 100%);}
+
+/* Floating steam particles */
+.steam-wrap{position:absolute;bottom:0;left:0;right:0;height:100%;pointer-events:none;overflow:hidden;}
+.steam{position:absolute;bottom:0;width:2px;border-radius:50%;background:rgba(253,249,244,.06);animation:steamRise linear infinite;}
+@keyframes steamRise{0%{transform:translateY(0) scaleX(1);opacity:.8;}50%{transform:translateY(-40vh) scaleX(2.5);opacity:.3;}100%{transform:translateY(-100vh) scaleX(4);opacity:0;}}
+
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 1rem;}
+.hero-tag{display:inline-flex;align-items:center;gap:.6rem;background:rgba(200,146,42,.12);border:1px solid rgba(200,146,42,.25);border-radius:50px;padding:.4rem 1.1rem;margin-bottom:2rem;opacity:0;animation:slideUp .8s .6s forwards;}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+.hero-tag span{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-light);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,146,42,.4);}50%{box-shadow:0 0 0 6px rgba(200,146,42,0);}}
+
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,9vw,7.5rem);font-weight:300;line-height:1.0;color:var(--warm-white);letter-spacing:-.03em;margin-bottom:.5rem;opacity:0;animation:slideUp .9s .8s forwards;}
+.hero-title em{font-style:italic;color:var(--gold-light);font-weight:300;}
+.hero-title strong{font-weight:700;display:block;}
+.hero-sub{font-size:clamp(.9rem,1.5vw,1.05rem);color:rgba(253,249,244,.55);max-width:440px;margin:1.8rem auto 3rem;line-height:1.9;font-weight:300;opacity:0;animation:slideUp .8s 1s forwards;}
+
+.hero-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:slideUp .8s 1.2s forwards;}
+.btn-gold{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:var(--brown-dark);padding:.9rem 2.2rem;border-radius:50px;font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:none;transition:all var(--tr);position:relative;overflow:hidden;}
+.btn-gold::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);opacity:0;transition:opacity .3s;}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(200,146,42,.45);}
+.btn-gold:hover::before{opacity:1;}
+.btn-outline{display:inline-flex;align-items:center;gap:.6rem;background:transparent;color:rgba(253,249,244,.75);padding:.9rem 2.2rem;border-radius:50px;font-weight:400;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(253,249,244,.2);cursor:none;transition:all var(--tr);}
+.btn-outline:hover{border-color:var(--gold-light);color:var(--gold-light);transform:translateY(-3px);}
+
+/* hero scroll indicator */
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:2;opacity:0;animation:fadeIn 1s 1.8s forwards;}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
+.scroll-txt{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(253,249,244,.3);}
+@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:.6;}50%{transform:scaleY(1.3);opacity:1;}}
+
+/* diagonal bottom clip */
+.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:120px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%);z-index:3;}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* =============================================
+   MARQUEE STRIP
+   ============================================= */
+.marquee-wrap{background:var(--gold);padding:.75rem 0;overflow:hidden;position:relative;z-index:4;}
+.marquee-track{display:flex;gap:3rem;animation:marquee 22s linear infinite;white-space:nowrap;}
+.marquee-item{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--brown-dark);font-weight:600;display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+.marquee-item::after{content:'◆';font-size:.4rem;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* =============================================
+   STATS
+   ============================================= */
+.stats{padding:6rem 5%;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;background:var(--cream);}
+.stat-card{text-align:center;padding:2.5rem 1rem;border:1px solid var(--border);border-radius:var(--r);background:var(--warm-white);position:relative;overflow:hidden;transition:transform var(--tr),box-shadow var(--tr);}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,146,42,.05) 0%,transparent 60%);opacity:0;transition:opacity .3s;}
+.stat-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(28,16,8,.1);}
+.stat-card:hover::before{opacity:1;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;color:var(--brown-dark);line-height:1;display:block;margin-bottom:.4rem;}
+.stat-num span{color:var(--gold);}
+.stat-label{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+
+/* =============================================
+   FEATURED / ABOUT SPLIT
+   ============================================= */
+.about{display:grid;grid-template-columns:1fr 1fr;min-height:600px;}
+.about-img{position:relative;overflow:hidden;}
+.about-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 8s ease;}
+.about-img:hover img{transform:scale(1.05);}
+.about-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(28,16,8,.5),transparent);}
+.about-img-tag{position:absolute;bottom:2.5rem;left:2.5rem;background:var(--gold);color:var(--brown-dark);padding:.6rem 1.2rem;border-radius:50px;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.about-content{background:var(--brown-dark);padding:6rem 5%;display:flex;flex-direction:column;justify-content:center;}
+.about-eyebrow{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;}
+.about-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4vw,3.4rem);font-weight:300;color:var(--warm-white);line-height:1.15;margin-bottom:1.8rem;}
+.about-title em{font-style:italic;color:var(--gold-light);}
+.about-body{font-size:.93rem;line-height:1.95;color:rgba(253,249,244,.6);font-weight:300;margin-bottom:2.5rem;max-width:420px;}
+.about-features{display:flex;flex-direction:column;gap:.9rem;}
+.about-feat{display:flex;align-items:center;gap:.8rem;font-size:.85rem;color:rgba(253,249,244,.7);}
+.about-feat-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+
+/* =============================================
+   MENU SECTION
+   ============================================= */
+.menu-section{padding:8rem 5%;background:var(--warm-white);}
+.section-header{text-align:center;margin-bottom:4rem;}
+.section-eye{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:300;color:var(--brown-dark);line-height:1.1;}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-sub{font-size:.9rem;color:var(--muted);margin-top:1rem;line-height:1.8;max-width:440px;margin-inline:auto;}
+
+.menu-tabs{display:flex;justify-content:center;gap:.5rem;margin-bottom:3.5rem;flex-wrap:wrap;}
+.tab-btn{padding:.55rem 1.6rem;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:none;transition:all var(--tr);}
+.tab-btn:hover,.tab-btn.active{background:var(--brown-dark);color:var(--gold-light);border-color:var(--brown-dark);}
+
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2rem;}
+
+/* ── MENU CARD ── */
+.menu-card{background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:transform var(--tr),box-shadow var(--tr);position:relative;cursor:none;}
+.menu-card:hover{transform:translateY(-8px);box-shadow:0 24px 56px rgba(28,16,8,.14);}
+.mc-img-wrap{height:210px;overflow:hidden;position:relative;}
+.mc-img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.4,0,.2,1);}
+.menu-card:hover .mc-img{transform:scale(1.07);}
+.mc-badge{position:absolute;top:1rem;right:1rem;background:var(--gold);color:var(--brown-dark);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .8rem;border-radius:50px;}
+.mc-cat-pill{position:absolute;bottom:1rem;left:1rem;background:rgba(28,16,8,.7);backdrop-filter:blur(6px);color:rgba(253,249,244,.8);font-size:.62rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:.28rem .7rem;border-radius:50px;}
+.mc-body{padding:1.4rem 1.5rem 1.6rem;}
+.mc-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--brown-dark);margin-bottom:.45rem;}
+.mc-desc{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem;}
+.mc-footer{display:flex;align-items:center;justify-content:space-between;}
+.mc-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--brown-acc);}
+.mc-order{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,146,42,.3);padding:.35rem .85rem;border-radius:50px;transition:all .2s;cursor:none;}
+.menu-card:hover .mc-order{background:var(--gold);color:var(--brown-dark);border-color:var(--gold);}
+
+/* =============================================
+   REVIEWS
+   ============================================= */
+.reviews-section{padding:8rem 5%;background:var(--brown-dark);position:relative;overflow:hidden;}
+.reviews-section::before{content:'';position:absolute;top:-120px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(200,146,42,.07),transparent 70%);pointer-events:none;}
+
+.reviews-masonry{columns:3;column-gap:1.5rem;margin-bottom:5rem;}
+.review-card{break-inside:avoid;background:rgba(255,255,255,.04);border:1px solid rgba(253,249,244,.07);border-radius:var(--r);padding:2rem;margin-bottom:1.5rem;transition:transform var(--tr),background var(--tr);}
+.review-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.08);}
+.review-card.gold-card{background:rgba(200,146,42,.1);border-color:rgba(200,146,42,.25);}
+.rc-stars{color:var(--gold-light);font-size:.95rem;letter-spacing:.08em;margin-bottom:1rem;}
+.rc-quote{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;line-height:1.85;color:rgba(253,249,244,.75);margin-bottom:1.5rem;}
+.rc-author{display:flex;align-items:center;gap:.8rem;}
+.rc-avatar{width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--brown-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0;font-family:'Cormorant Garamond',serif;}
+.rc-name{font-size:.85rem;font-weight:600;color:var(--warm-white);display:block;}
+.rc-role{font-size:.72rem;color:var(--muted);}
+
+/* Leave review */
+.review-form-section{max-width:620px;margin:0 auto;text-align:center;}
+.rf-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-style:italic;font-weight:300;color:var(--warm-white);margin-bottom:.5rem;}
+.rf-sub{font-size:.83rem;color:var(--muted);margin-bottom:2rem;}
+.star-row{display:flex;justify-content:center;gap:.4rem;margin-bottom:1.5rem;}
+.star-row span{font-size:2.2rem;color:rgba(253,249,244,.15);cursor:none;transition:color .15s,transform .15s;}
+.star-row span.lit{color:var(--gold-light);}
+.star-row span:hover{transform:scale(1.2);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;}
+.f-input,.f-area{width:100%;padding:.9rem 1.1rem;background:rgba(255,255,255,.05);border:1px solid rgba(253,249,244,.1);border-radius:10px;color:var(--warm-white);font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;}
+.f-input:focus,.f-area:focus{border-color:var(--gold);}
+.f-input::placeholder,.f-area::placeholder{color:rgba(253,249,244,.25);}
+.f-area{height:110px;resize:vertical;margin-bottom:.8rem;}
+.success-msg{color:#7EC8A4;font-size:.83rem;margin-top:.8rem;padding:.7rem;background:rgba(126,200,164,.08);border-radius:8px;border:1px solid rgba(126,200,164,.15);}
+.hidden{display:none!important;}
+
+/* =============================================
+   CONTACT
+   ============================================= */
+.contact-section{padding:8rem 5%;background:var(--cream);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:6rem;max-width:1100px;margin:0 auto;}
+.ci-eye{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.ci-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--brown-dark);line-height:1.15;margin-bottom:2.5rem;}
+.ci-title em{font-style:italic;color:var(--gold);}
+.ci-item{display:flex;gap:1rem;margin-bottom:1.8rem;align-items:flex-start;}
+.ci-icon{width:40px;height:40px;border-radius:10px;background:var(--brown-dark);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.ci-label{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.3rem;}
+.ci-val{font-size:.9rem;line-height:1.7;color:var(--muted);}
+.social-row{display:flex;gap:.7rem;margin-top:2.5rem;flex-wrap:wrap;}
+.soc-btn{padding:.45rem 1.1rem;border-radius:50px;border:1px solid var(--border);color:var(--brown-acc);text-decoration:none;font-size:.78rem;font-weight:500;transition:all .2s;cursor:none;}
+.soc-btn:hover{background:var(--brown-dark);color:var(--gold-light);border-color:var(--brown-dark);}
+
+.cf-wrap{background:var(--brown-dark);border-radius:calc(var(--r)*1.5);padding:3rem;}
+.cf-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--warm-white);margin-bottom:1.8rem;font-weight:400;}
+.cf-input,.cf-area{width:100%;padding:.85rem 1.1rem;background:rgba(255,255,255,.05);border:1px solid rgba(253,249,244,.1);border-radius:10px;color:var(--warm-white);font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;margin-bottom:.85rem;display:block;}
+.cf-input:focus,.cf-area:focus{border-color:var(--gold);}
+.cf-input::placeholder,.cf-area::placeholder{color:rgba(253,249,244,.25);}
+.cf-area{height:110px;resize:vertical;}
+
+/* map-like visual */
+.map-placeholder{width:100%;height:180px;border-radius:12px;background:linear-gradient(135deg,var(--brown-mid),var(--brown-dark));position:relative;overflow:hidden;margin-top:1.5rem;display:flex;align-items:center;justify-content:center;border:1px solid rgba(200,146,42,.15);}
+.map-placeholder::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(200,146,42,.05) 28px,rgba(200,146,42,.05) 29px),repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(200,146,42,.05) 28px,rgba(200,146,42,.05) 29px);}
+.map-pin{width:40px;height:40px;background:var(--gold);border-radius:50% 50% 50% 0;transform:rotate(-45deg);position:relative;box-shadow:0 4px 16px rgba(200,146,42,.4);}
+.map-pin::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:var(--brown-dark);border-radius:50%;}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+footer{background:var(--brown-mid);color:rgba(253,249,244,.55);}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4rem;padding:5rem 5% 4rem;border-bottom:1px solid rgba(253,249,244,.07);}
+.f-brand-logo{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--warm-white);letter-spacing:-.02em;margin-bottom:.8rem;}
+.f-brand-logo span{color:var(--gold);}
+.f-brand-desc{font-size:.83rem;line-height:1.85;max-width:240px;margin-bottom:1.5rem;}
+.f-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold-pale);opacity:.7;}
+.f-col-title{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1.2rem;}
+.f-col a{display:block;text-decoration:none;color:rgba(253,249,244,.45);font-size:.85rem;margin-bottom:.65rem;transition:color .2s;}
+.f-col a:hover{color:var(--gold-light);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 5%;font-size:.75rem;flex-wrap:wrap;gap:.5rem;}
+.footer-bottom a{color:var(--gold);text-decoration:none;}
+
+/* =============================================
+   SCROLL REVEAL
+   ============================================= */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1);}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .7s .1s,transform .7s .1s;}
+.reveal-left.visible{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .7s .1s,transform .7s .1s;}
+.reveal-right.visible{opacity:1;transform:none;}
+
+/* =============================================
+   TOOLTIP PRICE TAG (on hover over card)
+   ============================================= */
+.mc-price-tag{position:absolute;top:1rem;left:1rem;background:rgba(28,16,8,.82);backdrop-filter:blur(8px);color:var(--gold-light);font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;padding:.3rem .75rem;border-radius:8px;border:1px solid rgba(200,146,42,.2);opacity:0;transform:translateY(4px);transition:all .25s;}
+.menu-card:hover .mc-price-tag{opacity:1;transform:translateY(0);}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr);}.footer-top{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){.about{grid-template-columns:1fr;}.about-img{height:360px;}.contact-grid{grid-template-columns:1fr;gap:3rem;}.reviews-masonry{columns:2;}.nav-links,.nav-cta{display:none;}.hamburger{display:block;}}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr;}.reviews-masonry{columns:1;}.footer-top{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}.hero-title{font-size:3.2rem;}}
+/* =============================================
+   FINAL MOBILE OPTIMIZATION (ADD THIS AT END)
+   ============================================= */
+
+/* Better tap targets */
+button, a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Fix hero spacing + readability */
+@media (max-width: 600px) {
+  .hero-content {
+    padding-top: 80px;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    line-height: 1.1;
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+}
+
+/* Reduce heavy animations for mobile performance */
+@media (max-width: 768px) {
+  .hero-bg {
+    transform: none !important;
+  }
+
+  .steam {
+    display: none;
+  }
+
+  .reveal,
+  .reveal-left,
+  .reveal-right {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Improve menu cards */
+@media (max-width: 600px) {
+  .menu-card {
+    border-radius: 14px;
+  }
+
+  .mc-body {
+    padding: 1.2rem;
+  }
+
+  .mc-order {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Prevent zoom on inputs (important) */
+input, textarea {
+  font-size: 16px;
+}
+
+/* Navbar fix */
+@media (max-width: 600px) {
+  nav {
+    padding: 0.8rem 5%;
+  }
+
+  .nav-logo {
+    font-size: 1.4rem;
+  }
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+}
+
+/* Section spacing */
+@media (max-width: 600px) {
+  section {
+    margin-bottom: 2rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Véxz<span style="color:var(--gold)">.</span></div>
+  <div class="loader-line"></div>
+  <div class="loader-sub">The Neighbourhood · Gurugram · Est. 2018</div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#home" class="mob-link">Home</a>
+  <a href="#menu" class="mob-link">Menu</a>
+  <a href="#reviews" class="mob-link">Reviews</a>
+  <a href="#contact" class="mob-link">Contact</a>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">Véxz<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Reserve a Table</button>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="steam-wrap" id="steamWrap"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      <span>Now Open · 7:30 AM – 11 PM Daily</span>
+    </div>
+    <h1 class="hero-title">
+      <em>Where Every Cup</em>
+      <strong>Tells a Story</strong>
+    </h1>
+    <p class="hero-sub">Artisan coffee, handcrafted pastries, and a space designed for slow mornings and long conversations in the heart of Gurugram.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-gold">Explore Our Menu <span>↓</span></a>
+      <a href="#contact" class="btn-outline">Find Us <span>→</span></a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <div class="scroll-txt">Scroll</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- STATS -->
+<section class="stats" id="statsSection">
+  <div class="stat-card reveal"><span class="stat-num" data-target="2000">0<span>+</span></span><div class="stat-label">Cups Served Daily</div></div>
+  <div class="stat-card reveal" style="transition-delay:.1s"><span class="stat-num">20<span style="color:var(--gold)">+</span></span><div class="stat-label">Menu Items</div></div>
+  <div class="stat-card reveal" style="transition-delay:.2s"><span class="stat-num">4.9<span style="color:var(--gold)">★</span></span><div class="stat-label">Average Rating</div></div>
+  <div class="stat-card reveal" style="transition-delay:.3s"><span class="stat-num">6<span style="color:var(--gold)"> yrs</span></span><div class="stat-label">Serving New Delhi</div></div>
+</section>
+
+<!-- ABOUT SPLIT -->
+<section class="about">
+  <div class="about-img reveal-left">
+    <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900&q=85" alt="Café interior"/>
+    <div class="about-img-overlay"></div>
+    <div class="about-img-tag">Est. 2018 · Gurugram</div>
+  </div>
+  <div class="about-content reveal-right">
+    <div class="about-eyebrow">Our Philosophy</div>
+    <h2 class="about-title">Coffee is not a<br/><em>commodity —</em><br/>it's a craft.</h2>
+    <p class="about-body">We source single-origin beans, roast in-house weekly, and train every barista to understand the science and soul of extraction. No shortcuts. No compromises. Just the perfect cup, every single time.</p>
+    <div class="about-features">
+      <div class="about-feat"><div class="about-feat-dot"></div>Single-origin beans sourced from 6 countries</div>
+      <div class="about-feat"><div class="about-feat-dot"></div>All pastries baked fresh daily on-site</div>
+      <div class="about-feat"><div class="about-feat-dot"></div>Specialty dietary options available</div>
+      <div class="about-feat"><div class="about-feat-dot"></div>In-house roasting every Tuesday &amp; Friday</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="section-header reveal">
+    <div class="section-eye">Our Offerings</div>
+    <h2 class="section-title">The <em>Menu</em></h2>
+    <p class="section-sub">Everything is made fresh, daily. No shortcuts. No compromises.</p>
+  </div>
+  <div class="menu-tabs reveal">
+    <button class="tab-btn active" data-cat="all">All Items</button>
+    <button class="tab-btn" data-cat="coffee">Coffee</button>
+    <button class="tab-btn" data-cat="tea">Tea &amp; More</button>
+    <button class="tab-btn" data-cat="food">Food</button>
+    <button class="tab-btn" data-cat="dessert">Desserts</button>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="section-header reveal">
+    <div class="section-eye" style="color:var(--gold-light)">What Guests Say</div>
+    <h2 class="section-title" style="color:var(--warm-white)">Their <em style="color:var(--gold-light)">Stories</em></h2>
+  </div>
+  <div class="reviews-masonry" id="reviewsMasonry"></div>
+
+  <!-- Leave a review -->
+  <div class="review-form-section reveal">
+    <h3 class="rf-title">Share Your Experience</h3>
+    <p class="rf-sub">Your words mean everything to us.</p>
+    <div class="star-row" id="starRow">
+      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+    </div>
+    <div class="form-row">
+      <input class="f-input" id="rfName" placeholder="Your Name"/>
+      <input class="f-input" id="rfRole" placeholder="City / Occasion (optional)"/>
+    </div>
+    <textarea class="f-area" id="rfText" placeholder="Tell us about your visit…"></textarea>
+    <button class="btn-gold" id="submitReview" style="width:100%;justify-content:center;">Submit Review</button>
+    <div class="success-msg hidden" id="rfSuccess">✓ Thank you! Your review has been added.</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-grid">
+    <div>
+      <div class="ci-eye reveal">Get In Touch</div>
+      <h2 class="ci-title reveal">Come find us<br/>in <em>The Neighbourhood</em></h2>
+      <div class="ci-item reveal">
+        <div class="ci-icon">📍</div>
+        <div><div class="ci-label">Address</div><div class="ci-val">42, The Neighbourhood<br/>Gurugram – 110016</div></div>
+      </div>
+      <div class="ci-item reveal">
+        <div class="ci-icon">🕐</div>
+        <div><div class="ci-label">Hours</div><div class="ci-val">Mon–Fri: 7:30 AM – 10:00 PM<br/>Sat–Sun: 8:00 AM – 11:00 PM</div></div>
+      </div>
+      <div class="ci-item reveal">
+        <div class="ci-icon">📞</div>
+        <div><div class="ci-label">Phone</div><div class="ci-val">+91 879978xxxx</div></div>
+      </div>
+      <div class="ci-item reveal">
+        <div class="ci-icon">✉️</div>
+        <div><div class="ci-label">Email</div><div class="ci-val">vexz1000@gmail.com</div></div>
+      </div>
+      <div class="social-row reveal">
+        <a href="#" class="soc-btn">Instagram</a>
+        <a href="#" class="soc-btn">Facebook</a>
+        <a href="#" class="soc-btn">Zomato</a>
+        <a href="#" class="soc-btn">Swiggy</a>
+      </div>
+      <div class="map-placeholder reveal">
+        <div class="map-pin"></div>
+      </div>
+    </div>
+    <div class="cf-wrap reveal-right">
+      <div class="cf-title">Send us a message</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+        <input class="cf-input" id="cfName" placeholder="Full Name"/>
+        <input class="cf-input" id="cfEmail" placeholder="Email Address"/>
+      </div>
+      <input class="cf-input" id="cfSubject" placeholder="Subject"/>
+      <textarea class="cf-area" id="cfMsg" placeholder="Your message…"></textarea>
+      <button class="btn-gold" id="sendMsg" style="width:100%;justify-content:center;">Send Message →</button>
+      <div class="success-msg hidden" id="cfSuccess">✓ Sent! We'll respond within 24 hours.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="f-brand-logo">Véxz<span>.</span></div>
+      <div class="f-brand-desc">Artisan café experience rooted in quality, warmth, and the art of a perfect cup. Serving New Delhi since 2018.</div>
+      <div class="f-tagline">"Life's too short for bad coffee."</div>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Navigate</div>
+      <a href="#home">Home</a>
+      <a href="#menu">Menu</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Menu</div>
+      <a href="#">Coffee</a>
+      <a href="#">Tea &amp; More</a>
+      <a href="#">Food</a>
+      <a href="#">Desserts</a>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Follow Us</div>
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="#">Zomato</a>
+      <a href="#">Swiggy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Véxz Café. All rights reserved.</span>
+    <span>Crafted with ☕ in New Delhi · <a href="#">Privacy Policy</a></span>
+  </div>
+</footer>
+
+<script>
+/* =============================================
+   DATA
+   ============================================= */
+const MENU = [
+  {name:"Signature Espresso",cat:"coffee",price:"₹180",badge:"Bestseller",desc:"Double shot of our house blend. Bold crema, silky finish, unforgettable depth.",img:"https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&q=80"},
+  {name:"Café Brûlée Latte",cat:"coffee",price:"₹280",badge:"Signature",desc:"Vanilla-caramel espresso latte finished with a torched burnt sugar crust.",img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80"},
+  {name:"Cold Brew",cat:"coffee",price:"₹240",badge:null,desc:"18-hour slow-steeped cold brew. Silky, low-acid, deeply refreshing.",img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80"},
+  {name:"Cappuccino",cat:"coffee",price:"₹220",badge:null,desc:"Classic Italian cappuccino — equal espresso, steamed milk, and thick microfoam.",img:"https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80"},
+  {name:"Flat White",cat:"coffee",price:"₹250",badge:null,desc:"Velvety microfoam over a double ristretto. Strong, smooth, precise.",img:"https://images.unsplash.com/photo-1557575943-a0f13f6d8c09?w=600&q=80"},
+  {name:"Matcha Latte",cat:"tea",price:"₹270",badge:"Popular",desc:"Ceremonial-grade Japanese matcha with steamed oat milk. Earthy and calming.",img:"https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&q=80"},
+  {name:"Masala Chai",cat:"tea",price:"₹160",badge:null,desc:"House spice blend: cardamom, ginger, cinnamon, clove. Rich and warming.",img:"https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=600&q=80"},
+  {name:"Hibiscus Iced Tea",cat:"tea",price:"₹190",badge:"Summer Pick",desc:"Tart, floral hibiscus served over ice with a honey-lime drizzle.",img:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80"},
+  {name:"Mango Lassi",cat:"tea",price:"₹200",badge:null,desc:"Alphonso mango, thick yoghurt, cardamom, and a pinch of saffron.",img:"https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80"},
+  {name:"Eggs Benedict",cat:"food",price:"₹420",badge:"Chef's Pick",desc:"Poached eggs on brioche with smoked salmon and classic hollandaise.",img:"https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600&q=80"},
+  {name:"Avocado Toast",cat:"food",price:"₹350",badge:null,desc:"Smashed avocado on sourdough with cherry tomatoes, feta, and chilli flakes.",img:"https://images.unsplash.com/photo-1541519227354-08fa5d50c820?w=600&q=80"},
+  {name:"Butter Croissant",cat:"food",price:"₹180",badge:"Bestseller",desc:"72-hour lamination process. Impossibly flaky. Perfection in pastry form.",img:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80"},
+  {name:"Club Sandwich",cat:"food",price:"₹380",badge:null,desc:"Triple-decker toasted sandwich — chicken, bacon, lettuce, tomato, aioli.",img:"https://images.unsplash.com/photo-1509722747041-616f39b57569?w=600&q=80"},
+  {name:"Mushroom Quiche",cat:"food",price:"₹320",badge:null,desc:"Buttery pastry shell with wild mushroom and gruyère. Served warm.",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"},
+  {name:"Granola Bowl",cat:"food",price:"₹300",badge:"Healthy",desc:"House-made granola with Greek yoghurt, seasonal berries, and raw honey.",img:"https://images.unsplash.com/photo-1484723091739-30990ca5e0f8?w=600&q=80"},
+  {name:"Tiramisu",cat:"dessert",price:"₹310",badge:"Signature",desc:"Savoiardi soaked in espresso, layered with mascarpone. The real deal.",img:"https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80"},
+  {name:"Dark Chocolate Tart",cat:"dessert",price:"₹290",badge:null,desc:"Belgian dark chocolate ganache in a crisp tart shell. Rich and intense.",img:"https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=600&q=80"},
+  {name:"Banana Walnut Loaf",cat:"dessert",price:"₹230",badge:"Popular",desc:"Moist, dense banana loaf loaded with walnuts. Best served warm.",img:"https://images.unsplash.com/photo-1559622214-f8a9850965bb?w=600&q=80"},
+  {name:"Crème Brûlée",cat:"dessert",price:"₹340",badge:"Must Try",desc:"Silky vanilla custard with a perfectly torched caramelised sugar crust.",img:"https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=600&q=80"},
+  {name:"Strawberry Cheesecake",cat:"dessert",price:"₹290",badge:null,desc:"New York-style baked cheesecake with a fresh strawberry coulis.",img:"https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&q=80"},
+];
+
+const REVIEWS = [
+  {name:"Ananya Sharma",role:"Food Blogger · Delhi",stars:5,text:"Brûlée has ruined every other café for me. The espresso is flawless, the croissants are criminally good, and the staff remember your name. I come here every single morning.",gold:true},
+  {name:"Rohit Verma",role:"Architect · Gurgaon",stars:5,text:"I've travelled across Europe visiting cafés and Brûlée rivals the best of them. The cold brew is exceptional and the ambience is perfect for working. A hidden gem in the city.",gold:false},
+  {name:"Priya Nair",role:"Designer · Mumbai",stars:5,text:"The matcha latte here is genuinely the best I've had in India. Not too sweet, not too bitter — perfect. The Eggs Benedict is also outstanding. Highly, highly recommend.",gold:false},
+  {name:"Karan Mehta",role:"Startup Founder · Delhi",stars:4,text:"Consistently excellent. The tiramisu is a must-order. I brought my entire team here and everyone left impressed. Solid service, beautiful interiors, great food.",gold:false},
+  {name:"Sneha Joshi",role:"Coffee Enthusiast · Noida",stars:5,text:"The Café Brûlée Signature Blend is unlike anything I've tasted. Rich, layered, and beautifully balanced. This place takes coffee seriously and it shows in every single cup.",gold:true},
+  {name:"Meera Pillai",role:"Teacher · Delhi",stars:5,text:"From the moment you walk in, the aroma is incredible. The banana walnut loaf is soft, moist, and absolutely delicious. The staff are warm and attentive. Will definitely be back!",gold:false},
+];
+
+const MARQUEE_ITEMS = ["Artisan Coffee","Handcrafted Daily","Single-Origin Beans","New Delhi's Finest","Pastries &amp; More","Est. 2018","Hauz Khas Village","Reserve a Table"];
+
+/* =============================================
+   LOADER
+   ============================================= */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('gone'),1800);
+});
+
+/* =============================================
+   CUSTOM CURSOR
+   ============================================= */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('a,button,.menu-card,.review-card,.tab-btn,.soc-btn,.star-row span').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';ring.style.width='56px';ring.style.height='56px';ring.style.borderColor='var(--gold-light)';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';ring.style.width='38px';ring.style.height='38px';ring.style.borderColor='var(--gold)';});
+});
+
+/* =============================================
+   MARQUEE
+   ============================================= */
+const mItems = [...MARQUEE_ITEMS,...MARQUEE_ITEMS].map(t=>`<div class="marquee-item">${t}</div>`).join('');
+document.getElementById('marqueeTrack').innerHTML = mItems;
+
+/* =============================================
+   STEAM PARTICLES
+   ============================================= */
+const sw = document.getElementById('steamWrap');
+for(let i=0;i<18;i++){
+  const s=document.createElement('div');
+  s.className='steam';
+  s.style.cssText=`left:${Math.random()*100}%;width:${1+Math.random()*3}px;height:${40+Math.random()*80}px;animation-duration:${4+Math.random()*6}s;animation-delay:${Math.random()*6}s;`;
+  sw.appendChild(s);
+}
+
+/* =============================================
+   PARALLAX HERO BG
+   ============================================= */
+const heroBg = document.getElementById('heroBg');
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY;
+  heroBg.style.transform=`translateY(${sy*0.28}px)`;
+  document.getElementById('navbar').classList.toggle('scrolled',sy>60);
+});
+
+/* =============================================
+   RENDER MENU
+   ============================================= */
+function renderMenu(filter='all'){
+  const grid=document.getElementById('menuGrid');
+  const items=filter==='all'?MENU:MENU.filter(i=>i.cat===filter);
+  grid.innerHTML=items.map((item,idx)=>`
+    <div class="menu-card reveal" style="transition-delay:${idx*0.05}s">
+      <div class="mc-img-wrap">
+        <img class="mc-img" src="${item.img}" alt="${item.name}" loading="lazy"/>
+        ${item.badge?`<div class="mc-badge">${item.badge}</div>`:''}
+        <div class="mc-cat-pill">${item.cat}</div>
+        <div class="mc-price-tag">${item.price}</div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-name">${item.name}</div>
+        <div class="mc-desc">${item.desc}</div>
+        <div class="mc-footer">
+          <span class="mc-price">${item.price}</span>
+          <span class="mc-order">Order ↗</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  // re-observe new cards
+  grid.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMenu(btn.dataset.cat);
+  });
+});
+
+/* =============================================
+   RENDER REVIEWS
+   ============================================= */
+function renderReviews(extraReviews=[]){
+  const allReviews=[...REVIEWS,...extraReviews];
+  document.getElementById('reviewsMasonry').innerHTML=allReviews.map(r=>`
+    <div class="review-card${r.gold?' gold-card':''} reveal">
+      <div class="rc-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="rc-quote">"${r.text}"</div>
+      <div class="rc-author">
+        <div class="rc-avatar">${r.name[0]}</div>
+        <div><span class="rc-name">${r.name}</span><span class="rc-role">${r.role||''}</span></div>
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#reviewsMasonry .reveal').forEach(el=>revealObserver.observe(el));
+}
+
+/* =============================================
+   SCROLL REVEAL OBSERVER
+   ============================================= */
+const revealObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revealObserver.observe(el));
+
+/* =============================================
+   STAR RATING (Review Form)
+   ============================================= */
+let selRating=0;
+document.querySelectorAll('#starRow span').forEach(s=>{
+  s.addEventListener('mouseenter',()=>{
+    const v=+s.dataset.v;
+    document.querySelectorAll('#starRow span').forEach(x=>x.classList.toggle('lit',+x.dataset.v<=v));
+  });
+  s.addEventListener('mouseleave',()=>{
+    document.querySelectorAll('#starRow span').forEach(x=>x.classList.toggle('lit',+x.dataset.v<=selRating));
+  });
+  s.addEventListener('click',()=>{
+    selRating=+s.dataset.v;
+    document.querySelectorAll('#starRow span').forEach(x=>x.classList.toggle('lit',+x.dataset.v<=selRating));
+  });
+});
+
+/* =============================================
+   SUBMIT REVIEW
+   ============================================= */
+const extraReviews=[];
+document.getElementById('submitReview').addEventListener('click',()=>{
+  const name=document.getElementById('rfName').value.trim();
+  const role=document.getElementById('rfRole').value.trim();
+  const text=document.getElementById('rfText').value.trim();
+  if(!name||!text||!selRating){alert('Please enter your name, a review, and select a rating.');return;}
+  extraReviews.push({name,role,stars:selRating,text,gold:false});
+  renderReviews(extraReviews);
+  document.getElementById('rfName').value='';
+  document.getElementById('rfRole').value='';
+  document.getElementById('rfText').value='';
+  selRating=0;
+  document.querySelectorAll('#starRow span').forEach(s=>s.classList.remove('lit'));
+  const suc=document.getElementById('rfSuccess');
+  suc.classList.remove('hidden');
+  setTimeout(()=>suc.classList.add('hidden'),4000);
+});
+
+/* =============================================
+   CONTACT FORM
+   ============================================= */
+document.getElementById('sendMsg').addEventListener('click',()=>{
+  const n=document.getElementById('cfName').value.trim();
+  const e=document.getElementById('cfEmail').value.trim();
+  const m=document.getElementById('cfMsg').value.trim();
+  if(!n||!e||!m){alert('Please fill in all required fields.');return;}
+  ['cfName','cfEmail','cfSubject','cfMsg'].forEach(id=>document.getElementById(id).value='');
+  const suc=document.getElementById('cfSuccess');
+  suc.classList.remove('hidden');
+  setTimeout(()=>suc.classList.add('hidden'),4000);
+});
+
+/* =============================================
+   MOBILE MENU
+   ============================================= */
+document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('mobileMenu').classList.add('open'));
+document.getElementById('mobileClose').addEventListener('click',()=>document.getElementById('mobileMenu').classList.remove('open'));
+document.querySelectorAll('.mob-link').forEach(a=>a.addEventListener('click',()=>document.getElementById('mobileMenu').classList.remove('open')));
+
+/* =============================================
+   COUNTER ANIMATION
+   ============================================= */
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=e.target.querySelector('[data-target]');
+      if(el){
+        const target=+el.dataset.target;
+        let count=0;
+        const step=Math.ceil(target/60);
+        const t=setInterval(()=>{count=Math.min(count+step,target);el.firstChild.textContent=count.toLocaleString();if(count>=target)clearInterval(t);},25);
+      }
+      counterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.stat-card').forEach(c=>counterObs.observe(c));
+
+/* =============================================
+   INIT
+   ============================================= */
+renderMenu();
+renderReviews([]);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
